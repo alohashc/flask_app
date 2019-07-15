@@ -8,6 +8,7 @@ class User(db.Model):
     login = db.Column(db.String(20), unique=True)
     pw_hash = db.Column(db.String(180), unique=True)
     history = db.relationship('UserHistory', backref='owner')
+    token = db.relationship('Tokens', backref='owner')
 
     def __init__(self, login, password):
         self.login = login
@@ -23,16 +24,12 @@ class User(db.Model):
 class UserHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    date = db.Column(db.Date)
     src = db.Column(db.Integer)
     dst = db.Column(db.Integer)
-    places_type = db.Column(db.String(2))
 
-    def __init__(self, date=None, src=None, dst=None, places_type=None):
-        self.date = date
+    def __init__(self, src, dst):
         self.src = src
         self.dst = dst
-        self.places_type = places_type
 
 
 class Tokens(db.Model):
